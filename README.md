@@ -20,41 +20,58 @@ All python and bash scripts can be run independently. Execute any python script 
 3. python (version 3.6.10)
 
 
-### Installation required tools:
+### Install required tools:
 
-1. Create conda environments and install some tools or packages
-    $ conda create --name sgRNA python=3.6.10
-    $ conda install -c bioconda samtools=1.9
-    $ conda install -c anaconda pandas
-    $ conda install -c conda-forge biopython
-    $ conda install -c conda-forge matplotlib
+1. Create conda environments and install some tools or packages  
+  
+    $ conda create --name sgRNA python=3.6.10  
+    $ conda install -c bioconda samtools=1.9 
+    $ conda install -c anaconda pandas  
+    $ conda install -c conda-forge biopython  
+    $ conda install -c conda-forge matplotlib  
+  
 2. Install Trimmomatic (version 0.39)   
-    1. Download from http://www.usadellab.org/cms/?page=trimmomatic
-    2. Add environment variable
-        $ vi .bashrc
-        add "export PATH={your install dir}/Trimmomatic-0.39" to .bashrc file
-3. Install STAR mapping tool (version 2.7.9a)
-    1. Download Source Code (tar.gz) from https://github.com/alexdobin/STAR/releases/tag/2.7.9a 
-    2. $ tar -xzf 2.7.9a.tar.gz
+    1. Download from http://www.usadellab.org/cms/?page=trimmomatic  
+    2. Add environment variable  
+      
+        $ vi .bashrc  
+        add "export PATH={your install dir}/Trimmomatic-0.39" to .bashrc file  
+          
+3. Install STAR mapping tool (version 2.7.9a)  
+    1. Download Source Code (tar.gz) from https://github.com/alexdobin/STAR/releases/tag/2.7.9a  
+    2. Uncompress  
+      
+       $ tar -xzf 2.7.9a.tar.gz  
        $ cd STAR-2.7.9a
-    3. Compile
-       $ cd STAR/source
-       $ make STAR
-    4. Add environment variable
-       $ vi .bashrc
-       add "export PATH={your install path}/STAR-2.7.9a/bin/Linux_x86_64" to .bashrc file
-    5. Build genome index
-       $ STAR \
-       --runMode genomeGenerate -genomeDir ~/genomeDir_SARS2 \
-       --runThreadN 4 \
-       --genomeFastaFiles ~/SARS-CoV-2_sgRNA_profiling/resources/sars_cov2_NC_045512.2_genome.fasta \
-       --sjdbGTFfeatureExon ~/SARS-CoV-2_sgRNA_profiling/resources/GCF_009858895.2_ASM985889v3_genomic.gff
+         
+    3. Compile  
+  
+       $ cd STAR/source  
+       $ make STAR  
+         
+    4. Add environment variable  
+      
+       $ vi .bashrc  
+       add "export PATH={your install path}/STAR-2.7.9a/bin/Linux_x86_64" to .bashrc file  
+         
+    5. Build genome index  
+      
+       $ STAR \  
+       --runMode genomeGenerate -genomeDir ~/genomeDir_SARS2 \  
+       --runThreadN 4 \  
+       --genomeFastaFiles ~/SARS-CoV-2_sgRNA_profiling/resources/sars_cov2_NC_045512.2_genome.fasta \  
+       --sjdbGTFfeatureExon ~/SARS-CoV-2_sgRNA_profiling/resources/GCF_009858895.2_ASM985889v3_genomic.gff  
+         
 
-### Usage:
-1. Activate conda environment
-    $ conda activate sgRNA
-2. Generate "sgRNA_junction_summary.tsv"
-    $ bash {your folder path}/sgRNA_pipeline.sh -d ~/GenomeDir_SARS2 -v {variant_name} -t {threads-numbers}
-Note: sgRNA_pipeline.sh should be located at same directory with your fastq file
-3. Data visualization
-    $ R CMD BATCH venndiagram.r -i {"variant_name"_sgRNA_junction_summary.tsv}
+### Usage:  
+1. Activate conda environment. 
+  
+    $ conda activate sgRNA  
+      
+2. Generate "sgRNA_junction_summary.tsv"  
+  
+    $ bash {your folder path}/sgRNA_pipeline.sh -d ~/GenomeDir_SARS2 -v {variant_name} -t {threads-numbers}    
+      
+    Note: sgRNA_pipeline.sh should be located at same directory with your fastq file    
+3. Data visualization  
+    $ R CMD BATCH venndiagram.r -i {"variant_name"_sgRNA_junction_summary.tsv}  
