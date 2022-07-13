@@ -1,0 +1,17 @@
+ORF1a b
+ORF1b c
+S seagreen
+ORF3a cornflowerblue
+E mediumpurple
+M salmon
+ORF6 lightyellow
+ORF7a cyan
+ORF7b pink
+ORF8 lightgreen
+N khaki
+TRSL-inf #000000
+TRSL-outf #000000
+D-outf #505050
+D-inf #505050
+P-outf #a0a0a0
+P-inf #a0a0a0
