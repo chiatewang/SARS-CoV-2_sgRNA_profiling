@@ -42,13 +42,13 @@ Installation required tools:
         $ make STAR
     3.4 Add environment variable
         $ vi .bashrc
-        add "export PATH={your install dir}/STAR-2.7.9a/bin/Linux_x86_64"
+        add "export PATH={your install path}/STAR-2.7.9a/bin/Linux_x86_64"
 
 
 Usage:
 
 1. Generate "sgRNA_junction_summary.tsv file"
-    $ bash sgRNA_pipeline.sh -d GenomeDir_SARS2 -v {variant_name} -t {threads-numbers}
+    $ bash {your folder path}/sgRNA_pipeline.sh -d GenomeDir_SARS2 -v {variant_name} -t {threads-numbers}
 Note: sgRNA_pipeline.sh should be located at same directory with your fastq file
 2. Data visualization
     $ R CMD BATCH venndiagram.r -i {"variant_name"_sgRNA_junction_summary.tsv}
