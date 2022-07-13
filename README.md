@@ -32,7 +32,7 @@ Installation required tools:
 	Download from http://www.usadellab.org/cms/?page=trimmomatic
     2.2 Add environment variable
         $ vi .bashrc
-        add "export PATH={your install dir}/Trimmomatic-0.39"
+        add "export PATH={your install dir}/Trimmomatic-0.39" to .bashrc file
 3. Install STAR mapping tool (version 2.7.9a)
     3.1 Download Source Code (tar.gz) from https://github.com/alexdobin/STAR/releases/tag/2.7.9a 
     3.2 $ tar -xzf 2.7.9a.tar.gz
@@ -42,13 +42,18 @@ Installation required tools:
         $ make STAR
     3.4 Add environment variable
         $ vi .bashrc
-        add "export PATH={your install path}/STAR-2.7.9a/bin/Linux_x86_64"
-
+        add "export PATH={your install path}/STAR-2.7.9a/bin/Linux_x86_64" to .bashrc file
+    3.5 Build genome index
+        $ STAR \
+        --runMode genomeGenerate -genomeDir ~/genomeDir_SARS2 \
+        --runThreadN 4 \
+        --genomeFastaFiles ~/SARS-CoV-2_sgRNA_profiling/resources/sars_cov2_NC_045512.2_genome.fasta \
+        --sjdbGTFfeatureExon ~/SARS-CoV-2_sgRNA_profiling/resources/GCF_009858895.2_ASM985889v3_genomic.gff
 
 Usage:
 
 1. Generate "sgRNA_junction_summary.tsv file"
-    $ bash {your folder path}/sgRNA_pipeline.sh -d GenomeDir_SARS2 -v {variant_name} -t {threads-numbers}
+    $ bash {your folder path}/sgRNA_pipeline.sh -d ~/GenomeDir_SARS2 -v {variant_name} -t {threads-numbers}
 Note: sgRNA_pipeline.sh should be located at same directory with your fastq file
 2. Data visualization
     $ R CMD BATCH venndiagram.r -i {"variant_name"_sgRNA_junction_summary.tsv}
