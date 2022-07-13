@@ -1,9 +1,9 @@
-Tool Names??
+# Tool Names??
 
-Tool Names??: SARS-CoV-2_sgRNA_profiling
+## Tool Names??: SARS-CoV-2_sgRNA_profiling
 
 
-Description:
+### Description:
 
 This repository and pipeline is for the work reported in the manuscript "Profiling subgenomic RNAs from different variants of SARS-CoV-2."
 
@@ -13,14 +13,14 @@ This script maps the reads against the SARS-CoV-2 genome and generates junction 
 All python and bash scripts can be run independently. Execute any python script or bash script (without arguments) for detailed instructions on how to run them.
 
 
-Environments setup: 
+### Environments setup: 
 
 1. This pipeline is running on Ubuntu 20.04.4 LTS (GNU/Linux 5.13.0-52-generic x86_64)
 2. R (version 4.1)
 3. python (version 3.6.10)
 
 
-Installation required tools:
+### Installation required tools:
 
 1. Create conda environments and install some tools or packages
     $ conda create --name sgRNA python=3.6.10
@@ -29,8 +29,8 @@ Installation required tools:
     $ conda install -c conda-forge biopython
     $ conda install -c conda-forge matplotlib
 2. Install Trimmomatic (version 0.39)
-	Download from http://www.usadellab.org/cms/?page=trimmomatic
-    2.2 Add environment variable
+2.1. Download from http://www.usadellab.org/cms/?page=trimmomatic
+    2.2. Add environment variable
         $ vi .bashrc
         add "export PATH={your install dir}/Trimmomatic-0.39" to .bashrc file
 3. Install STAR mapping tool (version 2.7.9a)
@@ -50,7 +50,7 @@ Installation required tools:
         --genomeFastaFiles ~/SARS-CoV-2_sgRNA_profiling/resources/sars_cov2_NC_045512.2_genome.fasta \
         --sjdbGTFfeatureExon ~/SARS-CoV-2_sgRNA_profiling/resources/GCF_009858895.2_ASM985889v3_genomic.gff
 
-Usage:
+### Usage:
 
 1. Generate "sgRNA_junction_summary.tsv file"
     $ bash {your folder path}/sgRNA_pipeline.sh -d ~/GenomeDir_SARS2 -v {variant_name} -t {threads-numbers}
