@@ -77,5 +77,5 @@ All python and bash scripts can be run independently. Execute any python script 
     **venndiagram.Rmd** to generate venndiagram in the manuscript "Profiling subgenomic RNAs from different variants of SARS-CoV-2."  
     Note: R-markdown file is not run automatically.  
       
-    Not done yet
+    (automatically R script) Not done yet  
     $ R CMD BATCH venndiagram.r -i {"variant_name"_sgRNA_junction_summary.tsv}  
