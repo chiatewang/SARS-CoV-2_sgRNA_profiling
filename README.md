@@ -28,7 +28,7 @@ Installation required tools:
     $ conda install -c anaconda pandas
     $ conda install -c conda-forge biopython
     $ conda install -c conda-forge matplotlib
-2. Install Trimmomatic (version 0.39) \t
+2. Install Trimmomatic (version 0.39)
 	Download from http://www.usadellab.org/cms/?page=trimmomatic
     2.2 Add environment variable
         $ vi .bashrc
