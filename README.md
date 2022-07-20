@@ -1,11 +1,11 @@
-# Tool Names??
+# Subgenomic RNAs Profile ANalysis (SPAN)
 
-## Tool Names??: SARS-CoV-2_sgRNA_profiling
+## Subgenomic RNAs Profile ANalysis (SPAN): Subgenomic RNAs Profile Analysis of SARS-CoV-2 Variants
 
 
 ### Description:
 
-This repository and pipeline is for the work reported in the manuscript "Profiling subgenomic RNAs from different variants of SARS-CoV-2."
+This repository and pipeline is for the work reported in the manuscript "Subgenomic RNAs Profile Analysis of SARS-CoV-2 Variants."
 
 The purpose of this pipeline is to process Next Generataion Sequencing (NGS) data. 
 This script maps the reads against the SARS-CoV-2 genome and generates junction coordinates from splice alignments; junction corrdinates next process using python script to classify sgRNAs and finally visualize using python script and R packages.
