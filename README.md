@@ -59,8 +59,8 @@ All python and bash scripts can be run independently. Execute any python script 
        $ STAR \  
        --runMode genomeGenerate -genomeDir ~/genomeDir_SARS2 \  
        --runThreadN 4 \  
-       --genomeFastaFiles ~/SARS-CoV-2_sgRNA_profiling/resources/sars_cov2_NC_045512.2_genome.fasta \  
-       --sjdbGTFfeatureExon ~/SARS-CoV-2_sgRNA_profiling/resources/GCF_009858895.2_ASM985889v3_genomic.gff  
+       --genomeFastaFiles ~/SPAN/resources/sars_cov2_NC_045512.2_genome.fasta \  
+       --sjdbGTFfeatureExon ~/SPAN/resources/GCF_009858895.2_ASM985889v3_genomic.gff  
          
 
 ### Usage:  
@@ -74,7 +74,7 @@ All python and bash scripts can be run independently. Execute any python script 
       
     Note: sgRNA_pipeline.sh should be located at same directory with your fastq files    
 3. Data visualization  
-    **venndiagram.Rmd** to generate venndiagram in the manuscript "Profiling subgenomic RNAs from different variants of SARS-CoV-2."  
+    **venndiagram.Rmd** to generate venndiagram in the manuscript "Subgenomic RNAs Profile Analysis of SARS-CoV-2 Variants."  
     Note: R-markdown file is not run automatically.  
       
     (automatically R script) Not done yet  
