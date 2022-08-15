@@ -1,0 +1,644 @@
+---
+title: "SPAN output tsv file visualization"
+author: "Chia-Te Wang"
+date: '2022-06-28'
+output: html_document
+---
+
+## Part 1 Setup
+```{r}
+## Import library
+library(tidyverse)
+library(VennDiagram)
+#knitr::opts_chunk$set(echo = FALSE, warning = FALSE,dev = c('pdf', 'png'))
+navy=rgb(25,62,114,maxColorValue = 255)
+coral=rgb(234,93,78,maxColorValue = 255)
+orange=rgb(242,147,48,maxColorValue = 255)
+yellow=rgb(254,212,122,maxColorValue = 255)
+purple=rgb(102,103,173,maxColorValue = 255)
+aqua=rgb(46,169,176,maxColorValue = 255)
+green=rgb(70,168,108,maxColorValue = 255)
+grey=rgb(172,188,195,maxColorValue = 255)
+require(ggplot2)
+require(reshape2)
+require(scales)
+require(ftplottools)
+require(viridis)
+require(ggsignif)
+require(ggpubr)
+require(GGally)
+require(FactoMineR)
+require(factoextra)
+```
+
+## Part 2 Venn Diagram (All count >10 ncsgRNAs)
+```{r}
+## load data for Omicron comparison
+B.1.1.529 = read.delim("../../tsv/B.1.1.529_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+B.1.1.529 <- aggregate(count ~ JS , B.1.1.529, sum)
+
+BA.1 = read.delim("../../tsv/BA.1_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+BA.1 <- aggregate(count ~ JS , BA.1, sum)
+
+BA.2 = read.delim("../../tsv/BA.2_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+BA.2 <- aggregate(count ~ JS , BA.2, sum)
+
+BA.4 = read.delim("../../tsv/BA.4_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+BA.4 <- aggregate(count ~ JS , BA.4, sum)
+
+BA.5 = read.delim("../../tsv/BA.5_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+BA.5 <- aggregate(count ~ JS , BA.5, sum)
+
+## generate venn diagram (Omicron)
+Omicron_plot <- venn.diagram(list(B.1.1.529=B.1.1.529$JS,
+                      BA.1=BA.1$JS,
+                      BA.2=BA.2$JS,
+                      BA.4=BA.4$JS,
+                      BA.5=BA.5$JS),
+                      filename = NULL,
+                      main = "Noncanonical sgRNAs from Different Omicron Lineages",
+                     fill =c("navy","orange","yellow","coral","grey"))
+grid.newpage()
+grid.draw(Omicron_plot)
+ggsave(file.path("./Omicron_venndiagram.pdf"), Omicron_plot, width = 20, height = 13, units = "cm")
+
+## load data for different comparison
+# Combine Omcrion data
+Omicron = read.delim("../../tsv/Omicron_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Omicron <- aggregate(count ~ JS , Omicron, sum)
+
+Alpha = read.delim("../../tsv/Alpha_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Alpha <- aggregate(count ~ JS , Alpha, sum)
+
+Beta = read.delim("../../tsv/Beta_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Beta <- aggregate(count ~ JS , Beta, sum)
+
+Gamma = read.delim("../../tsv/Gamma_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Gamma <- aggregate(count ~ JS , Gamma, sum)
+
+Delta = read.delim("../../tsv/Delta_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Delta <- aggregate(count ~ JS , Delta, sum)
+
+## generate venn diagram (five variants)
+Variant_plot <- venn.diagram(list(Omicron=Omicron$JS,
+                                  Beta=Beta$JS,
+                                  Alpha=Alpha$JS,
+                                  Gamma=Gamma$JS,
+                                  Delta=Delta$JS),
+                             filename = NULL,
+                             main.cex = 1,
+                             main = "Noncanonical sgRNAs from Different Variants",fill=c("navy","orange","yellow","coral","grey"))
+grid.newpage()
+grid.draw(Variant_plot)
+ggsave(file.path("./Five_Variant_venndiagram.pdf"), Variant_plot, width = 20, height = 13, units = "cm")
+```
+
+## Part 3 Venn Diagram (Top 50 noncanonical sgRNA)
+```{r}
+## load data for Omicron comparison
+B.1.1.529_TOP50 = read.delim("../../tsv/B.1.1.529_Top50.tsv", header= TRUE, sep = "\t")
+BA.1_TOP50 = read.delim("../../tsv/BA.1_Top50.tsv", header= TRUE, sep = "\t")
+BA.2_TOP50 = read.delim("../../tsv/BA.2_Top50.tsv", header= TRUE, sep = "\t")
+BA.4_TOP50 = read.delim("../../tsv/BA.4_Top50.tsv", header= TRUE, sep = "\t")
+BA.5_TOP50 = read.delim("../../tsv/BA.5_Top50.tsv", header= TRUE, sep = "\t")
+
+## generate venn diagram (Omicron)
+Omicron_plot <- venn.diagram(list(B.1.1.529=B.1.1.529_TOP50$JS,
+                      BA.1=BA.1_TOP50$JS,
+                      BA.2=BA.2_TOP50$JS,
+                      BA.4=BA.4_TOP50$JS,
+                      BA.5=BA.5_TOP50$JS),
+                     filename = NULL,
+                     main = "Top 50 ncsgRNAs from Different Omicron Lineages",
+                     main.cex = 1,
+                     fill =c("navy","orange","yellow","coral","grey"))
+grid.newpage()
+grid.draw(Omicron_plot)
+ggsave(file.path("./Top50_Omicron_venndiagram.pdf"), Omicron_plot, width = 20, height = 13, units = "cm")
+
+## load data for different comparison
+# Combine Omcrion data
+Omicron_TOP50 = read.delim("../../tsv/Omicron_Top50.tsv", header= TRUE, sep = "\t")
+Alpha_TOP50 = read.delim("../../tsv/Alpha_Top50.tsv", header= TRUE, sep = "\t")
+Beta_TOP50 = read.delim("../../tsv/Beta_Top50.tsv", header= TRUE, sep = "\t")
+Gamma_TOP50 = read.delim("../../tsv/Gamma_Top50.tsv", header= TRUE, sep = "\t")
+Delta_TOP50 = read.delim("../../tsv/Delta_Top50.tsv", header= TRUE, sep = "\t")
+
+## generate venn diagram (five variants)
+Variant_plot <- venn.diagram(list(Omicron=Omicron_TOP50$JS,
+                                  Beta=Beta_TOP50$JS,
+                                  Alpha=Alpha_TOP50$JS,
+                                  Gamma=Gamma_TOP50$JS,
+                                  Delta=Delta_TOP50$JS),
+                             filename = NULL,
+                             main = "Top 50 ncsgRNAs from Different Variants",main.cex = 1,fill=c("navy","orange","yellow","coral","grey"))
+grid.newpage()
+grid.draw(Variant_plot)
+ggsave(file.path("./Top50_Five_Variant_venndiagram.pdf"), Variant_plot, width = 20, height = 13, units = "cm")
+```
+
+## Part 4 Intersection
+  ## Five Variants Intersection
+```{r}
+## Echo intersection 
+#https://stackoverflow.com/questions/17108191/how-to-export-proper-tsv
+#https://www.r-bloggers.com/2012/06/intersect-for-multiple-vectors-in-r/
+Alpha_B.1.1.529=intersect(Alpha_TOP50$JS,B.1.1.529_TOP50$JS)
+Alpha_BA.1=intersect(Alpha_TOP50$JS,BA.1_TOP50$JS)
+Alpha_BA.2=intersect(Alpha_TOP50$JS,BA.2_TOP50$JS)
+Alpha_BA.4=intersect(Alpha_TOP50$JS,BA.4_TOP50$JS)
+Alpha_BA.5=intersect(Alpha_TOP50$JS,BA.5_TOP50$JS)
+write.table(Alpha_B.1.1.529,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Alpha_B.1.1.529",row.names = FALSE,append = T)
+write.table(Alpha_BA.1,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Alpha_BA.1",row.names = FALSE,append = T)
+write.table(Alpha_BA.2,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Alpha_BA.2",row.names = FALSE,append = T)
+write.table(Alpha_BA.4,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Alpha_BA.4",row.names = FALSE,append = T)
+write.table(Alpha_BA.5,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Alpha_BA.5",row.names = FALSE,append = T)
+
+Beta_B.1.1.529=intersect(Beta_TOP50$JS,B.1.1.529_TOP50$JS)
+Beta_BA.1=intersect(Beta_TOP50$JS,BA.1_TOP50$JS)
+Beta_BA.2=intersect(Beta_TOP50$JS,BA.2_TOP50$JS)
+Beta_BA.4=intersect(Beta_TOP50$JS,BA.4_TOP50$JS)
+Beta_BA.5=intersect(Beta_TOP50$JS,BA.5_TOP50$JS)
+write.table(Beta_B.1.1.529,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Beta_B.1.1.529",row.names = FALSE,append = T)
+write.table(Beta_BA.1,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Beta_BA.1",row.names = FALSE,append = T)
+write.table(Beta_BA.2,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Beta_BA.2",row.names = FALSE,append = T)
+write.table(Beta_BA.4,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Beta_BA.4",row.names = FALSE,append = T)
+write.table(Beta_BA.5,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Beta_BA.5",row.names = FALSE,append = T)
+
+Gamma_B.1.1.529=intersect(Gamma_TOP50$JS,B.1.1.529_TOP50$JS)
+Gamma_BA.1=intersect(Gamma_TOP50$JS,BA.1_TOP50$JS)
+Gamma_BA.2=intersect(Gamma_TOP50$JS,BA.2_TOP50$JS)
+Gamma_BA.4=intersect(Gamma_TOP50$JS,BA.4_TOP50$JS)
+Gamma_BA.5=intersect(Gamma_TOP50$JS,BA.5_TOP50$JS)
+write.table(Gamma_B.1.1.529,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Gamma_B.1.1.529",row.names = FALSE,append = T)
+write.table(Gamma_BA.1,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Gamma_BA.1",row.names = FALSE,append = T)
+write.table(Gamma_BA.2,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Gamma_BA.2",row.names = FALSE,append = T)
+write.table(Gamma_BA.4,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Gamma_BA.4",row.names = FALSE,append = T)
+write.table(Gamma_BA.5,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Gamma_BA.5",row.names = FALSE,append = T)
+
+Delta_B.1.1.529=intersect(Delta_TOP50$JS,B.1.1.529_TOP50$JS)
+Delta_BA.1=intersect(Delta_TOP50$JS,BA.1_TOP50$JS)
+Delta_BA.2=intersect(Delta_TOP50$JS,BA.2_TOP50$JS)
+Delta_BA.4=intersect(Delta_TOP50$JS,BA.4_TOP50$JS)
+Delta_BA.5=intersect(Delta_TOP50$JS,BA.5_TOP50$JS)
+write.table(Delta_B.1.1.529,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Delta_B.1.1.529",row.names = FALSE,append = T)
+write.table(Delta_BA.1,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Delta_BA.1",row.names = FALSE,append = T)
+write.table(Delta_BA.2,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Delta_BA.2",row.names = FALSE,append = T)
+write.table(Delta_BA.4,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Delta_BA.4",row.names = FALSE,append = T)
+write.table(Delta_BA.5,file='./intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="Delta_BA.5",row.names = FALSE,append = T)
+```
+  ## BA.4 and BA.5 Intersection
+```{r}
+BA.4_BA.5=intersect(BA.4_TOP50$JS,BA.5_TOP50$JS)
+write.table(BA.4_BA.5,file='./BA.4_BA.5_intersect_JS.tsv', quote=FALSE, sep='\t', col.names ="BA.4_BA.5",row.names = FALSE,append = T)
+```
+
+## Part 5 Noncanonical sgRNA junction site visualization
+  ## Generate noncanonical sgRNAs plot (BA.4 BA.5)
+```{r}
+# Noncanonical sgRNA BA.4 versus BA.5
+BA.4 =read.delim("../../tsv/BA.4_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+BA.4$j5=as.numeric(as.character(BA.4$j5))
+BA.4$j3=as.numeric(as.character(BA.4$j3))
+BA.4$location="BA.4"
+BA.4$y=0.05
+
+BA.5 =read.delim("../../tsv/BA.5_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+BA.5$j5=as.numeric(as.character(BA.5$j5))
+BA.5$j3=as.numeric(as.character(BA.5$j3))
+BA.5$location="BA.5"
+BA.5$y=-0.05
+
+Variant=rbind(BA.4,BA.5)
+
+summary = Variant%>%mutate(total=(as.numeric(as.character(count))))%>%group_by(j5,y,location,j3)%>%summarise(n=n(),m=sum(total))
+
+full=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
+  geom_curve(data=summary%>%filter(location=="BA.4")%>%filter(n>5),lineend = "round",curvature=-0.3,color=grey,size=0.1)+
+  geom_curve(data=summary%>%filter(location=="BA.5")%>%filter(n>5),lineend = "round",curvature=0.3,color=grey,size=0.1)+
+  scale_alpha_continuous("Number of Samples")+
+  ft_theme()+
+  scale_x_continuous("Position")+
+  annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
+  annotate(geom="rect",xmin=0,xmax=200,ymin=-0.05,ymax=0.05,color="grey30",fill="grey30")+
+  annotate(geom="rect",xmin=200,xmax=13483,ymin=-0.05,ymax=0.05,color="grey50",fill="grey50")+
+  annotate(geom="text",x=7000,y=0,color="white",label="ORF1a",fontface='bold')+
+  annotate(geom="rect",xmin=13483,xmax=30000,ymin=-0.05,ymax=0.05,color="grey60",fill="grey60")+
+  annotate(geom="text",x=17000,y=0,color="white",label="ORF1b",fontface='bold')+
+  annotate(geom="rect",xmin=21532,xmax=30000,ymin=-0.05,ymax=0.05,color=navy,fill=navy)+
+  annotate(geom="text",x=23500,y=0,color="white",label="S",fontface='bold')+
+  annotate(geom="rect",xmin=25361,xmax=30000,ymin=-0.05,ymax=0.05,color=coral,fill=coral)+
+  annotate(geom="text",x=25750,y=0,color="white",label="3a",fontface='bold')+
+  annotate(geom="rect",xmin=26213,xmax=30000,ymin=-0.05,ymax=0.05,color=green,fill=green)+
+  annotate(geom="rect",xmin=26449,xmax=30000,ymin=-0.05,ymax=0.05,color=purple,fill=purple)+
+  annotate(geom="text",x=26700,y=0,color="white",label="M",fontface='bold')+
+  annotate(geom="rect",xmin=27017,xmax=30000,ymin=-0.05,ymax=0.05,color=yellow,fill=yellow)+
+  annotate(geom="rect",xmin=27364,xmax=30000,ymin=-0.05,ymax=0.05,color=orange,fill=orange)+
+  annotate(geom="rect",xmin=27864,xmax=30000,ymin=-0.05,ymax=0.05,color=grey,fill=grey)+
+  annotate(geom="rect",xmin=28235,xmax=30000,ymin=-0.05,ymax=0.05,color=aqua,fill=aqua)+
+  annotate(geom="text",x=28800,y=0,color="white",label="N",fontface='bold')+
+  annotate(geom="rect",xmin=29510,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
+  annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,fill="white",alpha=0.3)+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="BA.4")%>%filter(n>5)%>%arrange(n),aes(x=j5,y=0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="BA.5")%>%filter(n>5),aes(x=j5,y=-0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="BA.4")%>%filter(n>5)%>%arrange(n),aes(x=j3,y=0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="BA.5")%>%filter(n>5),aes(x=j3,y=-0.05,size=m,color=n))+
+  theme(
+    axis.text.y=element_blank(),
+    axis.title.y=element_blank(),
+    axis.line.y = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "right",
+    legend.justification = "center",
+    legend.direction = "vertical",
+    legend.key.size = unit(0.5, "cm"),
+    legend.key.height = unit(0.3, "cm"),
+        )+
+  scale_color_gradient("Number of\nSamples",low=navy,high=coral,limits= c(5,20))+
+  annotate(geom="text",label="BA.5",fontface='bold',x=1000,y=-0.5,color="#4D4845", hjust = 0)+
+  annotate(geom="text",label="BA.4",fontface='bold',x=1000,y=0.5,color="#4D4845", hjust = 0)+
+  scale_size_continuous("Number of\nReads",limits= c(0,180000))
+
+zoom = full+
+  coord_cartesian(xlim=c(22000,30000),ylim=c(-0.2,0.2))+
+  annotate(geom="text",x=26330,y=0,color="white",label="E",fontface='bold')+
+  annotate(geom="text",x=27170,y=0,color="white",label="6",fontface='bold')+
+  annotate(geom="text",x=27600,y=0,color="white",label="7a",fontface='bold')+
+  annotate(geom="text",x=28010,y=0,color="white",label="8",fontface='bold')+
+  annotate(geom="text",x=29750,y=0,color="white",label="10",fontface='bold')+
+  theme(
+    legend.position="none",
+    axis.title.x = element_blank(),
+    panel.background = element_rect(colour="#4D4845"),
+    plot.title = element_text(size=10,colour="#4D4845")
+  )+ggtitle("Zoom 22000-30000")
+ggsave(file.path("./BA.4_BA.5.pdf"), full, width = 20, height = 13, units = "cm")
+```
+  ## Generate noncanonical sgRNAs plot (Alpha Omicron)
+```{r}
+# Noncanonical sgRNA
+Alpha =read.delim("../../tsv/Alpha_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Alpha$j5=as.numeric(as.character(Alpha$j5))
+Alpha$j3=as.numeric(as.character(Alpha$j3))
+Alpha$location="Alpha"
+Alpha$y=-0.05
+
+Omicron =read.delim("../../tsv/Omicron_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Omicron$j5=as.numeric(as.character(Omicron$j5))
+Omicron$j3=as.numeric(as.character(Omicron$j3))
+Omicron$location="Omicron"
+Omicron$y=0.05
+
+Variant=rbind(Alpha,Omicron)
+
+summary = Variant%>%mutate(total=(as.numeric(as.character(count))))%>%group_by(j5,y,location,j3)%>%summarise(n=n(),m=sum(total))
+
+full=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
+  geom_curve(data=summary%>%filter(location=="Alpha")%>%filter(n>20),lineend = "round",curvature=0.3,color=grey,size=0.1)+
+  geom_curve(data=summary%>%filter(location=="Omicron")%>%filter(n>20),lineend = "round",curvature=-0.3,color=grey,size=0.1)+
+  scale_alpha_continuous("Number of Samples")+
+  ft_theme()+
+  scale_x_continuous("Position")+
+  annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
+  annotate(geom="rect",xmin=0,xmax=200,ymin=-0.05,ymax=0.05,color="grey30",fill="grey30")+
+  annotate(geom="rect",xmin=200,xmax=13483,ymin=-0.05,ymax=0.05,color="grey50",fill="grey50")+
+  annotate(geom="text",x=7000,y=0,color="white",label="ORF1a",fontface='bold')+
+  annotate(geom="rect",xmin=13483,xmax=30000,ymin=-0.05,ymax=0.05,color="grey60",fill="grey60")+
+  annotate(geom="text",x=17000,y=0,color="white",label="ORF1b",fontface='bold')+
+  annotate(geom="rect",xmin=21532,xmax=30000,ymin=-0.05,ymax=0.05,color=navy,fill=navy)+
+  annotate(geom="text",x=23500,y=0,color="white",label="S",fontface='bold')+
+  annotate(geom="rect",xmin=25361,xmax=30000,ymin=-0.05,ymax=0.05,color=coral,fill=coral)+
+  annotate(geom="text",x=25750,y=0,color="white",label="3a",fontface='bold')+
+  annotate(geom="rect",xmin=26213,xmax=30000,ymin=-0.05,ymax=0.05,color=green,fill=green)+
+  annotate(geom="rect",xmin=26449,xmax=30000,ymin=-0.05,ymax=0.05,color=purple,fill=purple)+
+  annotate(geom="text",x=26700,y=0,color="white",label="M",fontface='bold')+
+  annotate(geom="rect",xmin=27017,xmax=30000,ymin=-0.05,ymax=0.05,color=yellow,fill=yellow)+
+  annotate(geom="rect",xmin=27364,xmax=30000,ymin=-0.05,ymax=0.05,color=orange,fill=orange)+
+  annotate(geom="rect",xmin=27864,xmax=30000,ymin=-0.05,ymax=0.05,color=grey,fill=grey)+
+  annotate(geom="rect",xmin=28235,xmax=30000,ymin=-0.05,ymax=0.05,color=aqua,fill=aqua)+
+  annotate(geom="text",x=28800,y=0,color="white",label="N",fontface='bold')+
+  annotate(geom="rect",xmin=29510,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
+  annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,fill="white",alpha=0.3)+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Alpha")%>%filter(n>20)%>%arrange(n),aes(x=j5,y=-0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Omicron")%>%filter(n>20),aes(x=j5,y=0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Alpha")%>%filter(n>20)%>%arrange(n),aes(x=j3,y=-0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Omicron")%>%filter(n>20),aes(x=j3,y=0.05,size=m,color=n))+
+  theme(
+    axis.text.y=element_blank(),
+    axis.title.y=element_blank(),
+    axis.line.y = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "right",
+    legend.justification = "center",
+    legend.direction = "vertical",
+    legend.key.size = unit(0.5, "cm"),
+    legend.key.height = unit(0.3, "cm"),
+        )+
+  scale_color_gradient("Number of\nSamples",low=navy,high=coral,limits= c(20,80))+
+  annotate(geom="text",label="Alpha",fontface='bold',x=1000,y=-0.5,color="#4D4845", hjust = 0)+
+  annotate(geom="text",label="Omicron",fontface='bold',x=1000,y=0.5,color="#4D4845", hjust = 0)+
+  scale_size_continuous("Number of\nReads",limits= c(0,180000))
+
+zoom = full+
+  coord_cartesian(xlim=c(22000,30000),ylim=c(-0.2,0.2))+
+  annotate(geom="text",x=26330,y=0,color="white",label="E",fontface='bold')+
+  annotate(geom="text",x=27170,y=0,color="white",label="6",fontface='bold')+
+  annotate(geom="text",x=27600,y=0,color="white",label="7a",fontface='bold')+
+  annotate(geom="text",x=28010,y=0,color="white",label="8",fontface='bold')+
+  annotate(geom="text",x=29750,y=0,color="white",label="10",fontface='bold')+
+  theme(
+    legend.position="none",
+    axis.title.x = element_blank(),
+    panel.background = element_rect(colour="#4D4845"),
+    plot.title = element_text(size=10,colour="#4D4845")
+  )+ggtitle("Zoom 22000-30000")
+ggsave(file.path("./Alpha_Omicron.pdf"), full, width = 20, height = 13, units = "cm")
+```
+  ## Generate noncanonical sgRNAs plot (Beta Omicron)
+```{r}
+# Noncanonical sgRNA
+Beta =read.delim("../../tsv/Beta_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Beta$j5=as.numeric(as.character(Beta$j5))
+Beta$j3=as.numeric(as.character(Beta$j3))
+Beta$location="Beta"
+Beta$y=-0.05
+
+Omicron =read.delim("../../tsv/Omicron_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Omicron$j5=as.numeric(as.character(Omicron$j5))
+Omicron$j3=as.numeric(as.character(Omicron$j3))
+Omicron$location="Omicron"
+Omicron$y=0.05
+
+Variant=rbind(Beta,Omicron)
+
+summary = Variant%>%mutate(total=(as.numeric(as.character(count))))%>%group_by(j5,y,location,j3)%>%summarise(n=n(),m=sum(total))
+
+full=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
+  geom_curve(data=summary%>%filter(location=="Beta")%>%filter(n>20),lineend = "round",curvature=0.3,color=grey,size=0.1)+
+  geom_curve(data=summary%>%filter(location=="Omicron")%>%filter(n>20),lineend = "round",curvature=-0.3,color=grey,size=0.1)+
+  scale_alpha_continuous("Number of Samples")+
+  ft_theme()+
+  scale_x_continuous("Position")+
+  annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
+  annotate(geom="rect",xmin=0,xmax=200,ymin=-0.05,ymax=0.05,color="grey30",fill="grey30")+
+  annotate(geom="rect",xmin=200,xmax=13483,ymin=-0.05,ymax=0.05,color="grey50",fill="grey50")+
+  annotate(geom="text",x=7000,y=0,color="white",label="ORF1a",fontface='bold')+
+  annotate(geom="rect",xmin=13483,xmax=30000,ymin=-0.05,ymax=0.05,color="grey60",fill="grey60")+
+  annotate(geom="text",x=17000,y=0,color="white",label="ORF1b",fontface='bold')+
+  annotate(geom="rect",xmin=21532,xmax=30000,ymin=-0.05,ymax=0.05,color=navy,fill=navy)+
+  annotate(geom="text",x=23500,y=0,color="white",label="S",fontface='bold')+
+  annotate(geom="rect",xmin=25361,xmax=30000,ymin=-0.05,ymax=0.05,color=coral,fill=coral)+
+  annotate(geom="text",x=25750,y=0,color="white",label="3a",fontface='bold')+
+  annotate(geom="rect",xmin=26213,xmax=30000,ymin=-0.05,ymax=0.05,color=green,fill=green)+
+  annotate(geom="rect",xmin=26449,xmax=30000,ymin=-0.05,ymax=0.05,color=purple,fill=purple)+
+  annotate(geom="text",x=26700,y=0,color="white",label="M",fontface='bold')+
+  annotate(geom="rect",xmin=27017,xmax=30000,ymin=-0.05,ymax=0.05,color=yellow,fill=yellow)+
+  annotate(geom="rect",xmin=27364,xmax=30000,ymin=-0.05,ymax=0.05,color=orange,fill=orange)+
+  annotate(geom="rect",xmin=27864,xmax=30000,ymin=-0.05,ymax=0.05,color=grey,fill=grey)+
+  annotate(geom="rect",xmin=28235,xmax=30000,ymin=-0.05,ymax=0.05,color=aqua,fill=aqua)+
+  annotate(geom="text",x=28800,y=0,color="white",label="N",fontface='bold')+
+  annotate(geom="rect",xmin=29510,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
+  annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,fill="white",alpha=0.3)+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Beta")%>%filter(n>20)%>%arrange(n),aes(x=j5,y=-0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Omicron")%>%filter(n>20),aes(x=j5,y=0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Beta")%>%filter(n>20)%>%arrange(n),aes(x=j3,y=-0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Omicron")%>%filter(n>20),aes(x=j3,y=0.05,size=m,color=n))+
+  theme(
+    axis.text.y=element_blank(),
+    axis.title.y=element_blank(),
+    axis.line.y = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "right",
+    legend.justification = "center",
+    legend.direction = "vertical",
+    legend.key.size = unit(0.5, "cm"),
+    legend.key.height = unit(0.3, "cm"),
+        )+
+  scale_color_gradient("Number of\nSamples",low=navy,high=coral,limits= c(20,80))+
+  annotate(geom="text",label="Beta",fontface='bold',x=1000,y=-0.5,color="#4D4845", hjust = 0)+
+  annotate(geom="text",label="Omicron",fontface='bold',x=1000,y=0.5,color="#4D4845", hjust = 0)+
+  scale_size_continuous("Number of\nReads",limits= c(0,180000))
+
+zoom = full+
+  coord_cartesian(xlim=c(22000,30000),ylim=c(-0.2,0.2))+
+  annotate(geom="text",x=26330,y=0,color="white",label="E",fontface='bold')+
+  annotate(geom="text",x=27170,y=0,color="white",label="6",fontface='bold')+
+  annotate(geom="text",x=27600,y=0,color="white",label="7a",fontface='bold')+
+  annotate(geom="text",x=28010,y=0,color="white",label="8",fontface='bold')+
+  annotate(geom="text",x=29750,y=0,color="white",label="10",fontface='bold')+
+  theme(
+    legend.position="none",
+    axis.title.x = element_blank(),
+    panel.background = element_rect(colour="#4D4845"),
+    plot.title = element_text(size=10,colour="#4D4845")
+  )+ggtitle("Zoom 22000-30000")
+ggsave(file.path("./Beta_Omicron.pdf"), full, width = 20, height = 13, units = "cm")
+```
+  ## Generate noncanonical sgRNAs plot (Gamma Omicron)
+```{r}
+# Noncanonical sgRNA
+Gamma =read.delim("../../tsv/Gamma_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Gamma$j5=as.numeric(as.character(Gamma$j5))
+Gamma$j3=as.numeric(as.character(Gamma$j3))
+Gamma$location="Gamma"
+Gamma$y=-0.05
+
+Omicron =read.delim("../../tsv/Omicron_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Omicron$j5=as.numeric(as.character(Omicron$j5))
+Omicron$j3=as.numeric(as.character(Omicron$j3))
+Omicron$location="Omicron"
+Omicron$y=0.05
+
+Variant=rbind(Gamma,Omicron)
+
+summary = Variant%>%mutate(total=(as.numeric(as.character(count))))%>%group_by(j5,y,location,j3)%>%summarise(n=n(),m=sum(total))
+
+full=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
+  geom_curve(data=summary%>%filter(location=="Gamma")%>%filter(n>20),lineend = "round",curvature=0.3,color=grey,size=0.1)+
+  geom_curve(data=summary%>%filter(location=="Omicron")%>%filter(n>20),lineend = "round",curvature=-0.3,color=grey,size=0.1)+
+  scale_alpha_continuous("Number of Samples")+
+  ft_theme()+
+  scale_x_continuous("Position")+
+  annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
+  annotate(geom="rect",xmin=0,xmax=200,ymin=-0.05,ymax=0.05,color="grey30",fill="grey30")+
+  annotate(geom="rect",xmin=200,xmax=13483,ymin=-0.05,ymax=0.05,color="grey50",fill="grey50")+
+  annotate(geom="text",x=7000,y=0,color="white",label="ORF1a",fontface='bold')+
+  annotate(geom="rect",xmin=13483,xmax=30000,ymin=-0.05,ymax=0.05,color="grey60",fill="grey60")+
+  annotate(geom="text",x=17000,y=0,color="white",label="ORF1b",fontface='bold')+
+  annotate(geom="rect",xmin=21532,xmax=30000,ymin=-0.05,ymax=0.05,color=navy,fill=navy)+
+  annotate(geom="text",x=23500,y=0,color="white",label="S",fontface='bold')+
+  annotate(geom="rect",xmin=25361,xmax=30000,ymin=-0.05,ymax=0.05,color=coral,fill=coral)+
+  annotate(geom="text",x=25750,y=0,color="white",label="3a",fontface='bold')+
+  annotate(geom="rect",xmin=26213,xmax=30000,ymin=-0.05,ymax=0.05,color=green,fill=green)+
+  annotate(geom="rect",xmin=26449,xmax=30000,ymin=-0.05,ymax=0.05,color=purple,fill=purple)+
+  annotate(geom="text",x=26700,y=0,color="white",label="M",fontface='bold')+
+  annotate(geom="rect",xmin=27017,xmax=30000,ymin=-0.05,ymax=0.05,color=yellow,fill=yellow)+
+  annotate(geom="rect",xmin=27364,xmax=30000,ymin=-0.05,ymax=0.05,color=orange,fill=orange)+
+  annotate(geom="rect",xmin=27864,xmax=30000,ymin=-0.05,ymax=0.05,color=grey,fill=grey)+
+  annotate(geom="rect",xmin=28235,xmax=30000,ymin=-0.05,ymax=0.05,color=aqua,fill=aqua)+
+  annotate(geom="text",x=28800,y=0,color="white",label="N",fontface='bold')+
+  annotate(geom="rect",xmin=29510,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
+  annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,fill="white",alpha=0.3)+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Gamma")%>%filter(n>20)%>%arrange(n),aes(x=j5,y=-0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Omicron")%>%filter(n>20),aes(x=j5,y=0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Gamma")%>%filter(n>20)%>%arrange(n),aes(x=j3,y=-0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Omicron")%>%filter(n>20),aes(x=j3,y=0.05,size=m,color=n))+
+  theme(
+    axis.text.y=element_blank(),
+    axis.title.y=element_blank(),
+    axis.line.y = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "right",
+    legend.justification = "center",
+    legend.direction = "vertical",
+    legend.key.size = unit(0.5, "cm"),
+    legend.key.height = unit(0.3, "cm"),
+        )+
+  scale_color_gradient("Number of\nSamples",low=navy,high=coral,limits= c(20,80))+
+  annotate(geom="text",label="Gamma",fontface='bold',x=1000,y=-0.5,color="#4D4845", hjust = 0)+
+  annotate(geom="text",label="Omicron",fontface='bold',x=1000,y=0.5,color="#4D4845", hjust = 0)+
+  scale_size_continuous("Number of\nReads",limits= c(0,180000))
+
+zoom = full+
+  coord_cartesian(xlim=c(22000,30000),ylim=c(-0.2,0.2))+
+  annotate(geom="text",x=26330,y=0,color="white",label="E",fontface='bold')+
+  annotate(geom="text",x=27170,y=0,color="white",label="6",fontface='bold')+
+  annotate(geom="text",x=27600,y=0,color="white",label="7a",fontface='bold')+
+  annotate(geom="text",x=28010,y=0,color="white",label="8",fontface='bold')+
+  annotate(geom="text",x=29750,y=0,color="white",label="10",fontface='bold')+
+  theme(
+    legend.position="none",
+    axis.title.x = element_blank(),
+    panel.background = element_rect(colour="#4D4845"),
+    plot.title = element_text(size=10,colour="#4D4845")
+  )+ggtitle("Zoom 22000-30000")
+ggsave(file.path("./Gamma_Omicron.pdf"), full, width = 20, height = 13, units = "cm")
+```
+  ## Generate noncanonical sgRNAs plot (Delta Omicron)
+```{r}
+# Noncanonical sgRNA
+Delta =read.delim("../../tsv/Delta_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Delta$j5=as.numeric(as.character(Delta$j5))
+Delta$j3=as.numeric(as.character(Delta$j3))
+Delta$location="Delta"
+Delta$y=-0.05
+
+Omicron =read.delim("../../tsv/Omicron_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+Omicron$j5=as.numeric(as.character(Omicron$j5))
+Omicron$j3=as.numeric(as.character(Omicron$j3))
+Omicron$location="Omicron"
+Omicron$y=0.05
+
+Variant=rbind(Delta,Omicron)
+
+summary = Variant%>%mutate(total=(as.numeric(as.character(count))))%>%group_by(j5,y,location,j3)%>%summarise(n=n(),m=sum(total))
+
+full=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
+  geom_curve(data=summary%>%filter(location=="Delta")%>%filter(n>20),lineend = "round",curvature=0.3,color=grey,size=0.1)+
+  geom_curve(data=summary%>%filter(location=="Omicron")%>%filter(n>20),lineend = "round",curvature=-0.3,color=grey,size=0.1)+
+  scale_alpha_continuous("Number of Samples")+
+  ft_theme()+
+  scale_x_continuous("Position")+
+  annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
+  annotate(geom="rect",xmin=0,xmax=200,ymin=-0.05,ymax=0.05,color="grey30",fill="grey30")+
+  annotate(geom="rect",xmin=200,xmax=13483,ymin=-0.05,ymax=0.05,color="grey50",fill="grey50")+
+  annotate(geom="text",x=7000,y=0,color="white",label="ORF1a",fontface='bold')+
+  annotate(geom="rect",xmin=13483,xmax=30000,ymin=-0.05,ymax=0.05,color="grey60",fill="grey60")+
+  annotate(geom="text",x=17000,y=0,color="white",label="ORF1b",fontface='bold')+
+  annotate(geom="rect",xmin=21532,xmax=30000,ymin=-0.05,ymax=0.05,color=navy,fill=navy)+
+  annotate(geom="text",x=23500,y=0,color="white",label="S",fontface='bold')+
+  annotate(geom="rect",xmin=25361,xmax=30000,ymin=-0.05,ymax=0.05,color=coral,fill=coral)+
+  annotate(geom="text",x=25750,y=0,color="white",label="3a",fontface='bold')+
+  annotate(geom="rect",xmin=26213,xmax=30000,ymin=-0.05,ymax=0.05,color=green,fill=green)+
+  annotate(geom="rect",xmin=26449,xmax=30000,ymin=-0.05,ymax=0.05,color=purple,fill=purple)+
+  annotate(geom="text",x=26700,y=0,color="white",label="M",fontface='bold')+
+  annotate(geom="rect",xmin=27017,xmax=30000,ymin=-0.05,ymax=0.05,color=yellow,fill=yellow)+
+  annotate(geom="rect",xmin=27364,xmax=30000,ymin=-0.05,ymax=0.05,color=orange,fill=orange)+
+  annotate(geom="rect",xmin=27864,xmax=30000,ymin=-0.05,ymax=0.05,color=grey,fill=grey)+
+  annotate(geom="rect",xmin=28235,xmax=30000,ymin=-0.05,ymax=0.05,color=aqua,fill=aqua)+
+  annotate(geom="text",x=28800,y=0,color="white",label="N",fontface='bold')+
+  annotate(geom="rect",xmin=29510,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
+  annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,fill="white",alpha=0.3)+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Delta")%>%filter(n>20)%>%arrange(n),aes(x=j5,y=-0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Omicron")%>%filter(n>20),aes(x=j5,y=0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Delta")%>%filter(n>20)%>%arrange(n),aes(x=j3,y=-0.05,size=m,color=n))+
+  geom_point(alpha=0.8,data=summary%>%filter(location=="Omicron")%>%filter(n>20),aes(x=j3,y=0.05,size=m,color=n))+
+  theme(
+    axis.text.y=element_blank(),
+    axis.title.y=element_blank(),
+    axis.line.y = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    legend.position = "right",
+    legend.justification = "center",
+    legend.direction = "vertical",
+    legend.key.size = unit(0.5, "cm"),
+    legend.key.height = unit(0.3, "cm"),
+        )+
+  scale_color_gradient("Number of\nSamples",low=navy,high=coral,limits= c(20,80))+
+  annotate(geom="text",label="Delta",fontface='bold',x=1000,y=-0.5,color="#4D4845", hjust = 0)+
+  annotate(geom="text",label="Omicron",fontface='bold',x=1000,y=0.5,color="#4D4845", hjust = 0)+
+  scale_size_continuous("Number of\nReads",limits= c(0,180000))
+
+zoom = full+
+  coord_cartesian(xlim=c(22000,30000),ylim=c(-0.2,0.2))+
+  annotate(geom="text",x=26330,y=0,color="white",label="E",fontface='bold')+
+  annotate(geom="text",x=27170,y=0,color="white",label="6",fontface='bold')+
+  annotate(geom="text",x=27600,y=0,color="white",label="7a",fontface='bold')+
+  annotate(geom="text",x=28010,y=0,color="white",label="8",fontface='bold')+
+  annotate(geom="text",x=29750,y=0,color="white",label="10",fontface='bold')+
+  theme(
+    legend.position="none",
+    axis.title.x = element_blank(),
+    panel.background = element_rect(colour="#4D4845"),
+    plot.title = element_text(size=10,colour="#4D4845")
+  )+ggtitle("Zoom 22000-30000")
+ggsave(file.path("./Delta_Omicron.pdf"), full, width = 20, height = 13, units = "cm")
+```
+
+
+
+
+### Other Example Code
+  ## Generate Top 50 sgRNA from raw noncanonical junction
+```{r}
+BA.4 = read.delim("/Users/justin/Desktop/SPAN/tsv/BA.4_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+
+BA.4 = BA.4%>%mutate(total=(as.numeric(as.character(count))))%>%group_by(JS,j5,j3,deletion.size,evtype,evrelorf)%>%summarise(count=sum(total))%>%arrange(desc(count))%>%head(50)
+
+BA.5 = read.delim("/Users/justin/Desktop/SPAN/tsv/BA.5_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
+BA.5 = BA.5%>%mutate(total=(as.numeric(as.character(count))))%>%group_by(JS,j5,j3,deletion.size,evtype,evrelorf)%>%summarise(count=sum(total))%>%arrange(desc(count))%>%head(50)
+```
+  ## Load data (excel)
+```{r}
+library(openxlsx)
+Name <- read.xlsx("$filefullpath/filename.xlsx",sheet = "工作表1")
+```
+  ## Combine all dataframe
+```{r}
+Variant = list(B.1.1.7,B.1.351,B.1.617.2,P.1,B.1.1.529)
+VariantJS <- Variant %>% reduce(full_join)
+##https://www.delftstack.com/zh-tw/howto/r/merge-in-r/
+```
+  ## sum up by JS
+```{r}
+B.1.1.7 <- aggregate(count ~ JS , B.1.1.7, sum) 
+B.1.1.7 <- filter(B.1.1.7, count >= 100) 
+B.1.1.7 <- arrange(B.1.1.7,desc(count))
+B.1.351 <- aggregate(count ~ JS , B.1.351, sum) 
+B.1.351 <- filter(B.1.351, count >= 100) 
+B.1.351 <- arrange(B.1.351,desc(count))
+B.1.617.2 <- aggregate(count ~ JS , B.1.617.2, sum) 
+B.1.617.2 <- filter(B.1.617.2, count >= 100) 
+B.1.617.2 <- arrange(B.1.617.2,desc(count))
+P.1 <- aggregate(count ~ JS , P.1, sum) 
+P.1 <- filter(P.1, count >= 100) 
+P.1 <- arrange(P.1,desc(count))
+B.1.1.529 <- aggregate(count ~ JS , B.1.1.529, sum) 
+B.1.1.529 <- filter(B.1.1.529, count >= 100) 
+B.1.1.529 <- arrange(B.1.1.529,desc(count))
+```
