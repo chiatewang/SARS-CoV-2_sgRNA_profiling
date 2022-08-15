@@ -1,0 +1,12 @@
+j5	j3	count	startpos	productsize	JS	deletion size	chorm	type	name	start	end	evtype	evrelorf	evsize	startpos_byfusion
+3214	11873	42	106	9	3214 - 11873	8659						frameshift-fusion-orf	ORF1a-ORF1a	(983.0, 983)
+3811	29529	20	106	9	3811 - 29529	25718						frameshift-fusion-orf	ORF1a-N	(1182.0, 1205)
+21764	29126	13	106	9	21764 - 29126	7362						in-frame-fusion-orf	S-N	(67.33333333333333, 135.66666666666666)
+10409	12172	67	106	9	10409 - 12172	1763						frameshift-fusion-orf	ORF1a-ORF1a	(3381.3333333333335, 3383)
+14408	17995	30	106	9	14408 - 17995	3587						frameshift-fusion-orf	ORF1b-ORF1b	(313.6666666666667, 317)
+5666	8843	16	106	9	5666 - 8843	3177						in-frame-fusion-orf	ORF1a-ORF1a	(1800.3333333333333, 1541.3333333333333)
+21749	23655	16	106	9	21749 - 23655	1906						frameshift-fusion-orf	S-S	(62.333333333333336, 95)
+14408	17995	16	106	9	14408 - 17995	3587						frameshift-fusion-orf	ORF1b-ORF1b	(313.6666666666667, 317)
+14408	17995	14	106	9	14408 - 17995	3587						frameshift-fusion-orf	ORF1b-ORF1b	(313.6666666666667, 317)
+14408	17995	14	106	9	14408 - 17995	3587						frameshift-fusion-orf	ORF1b-ORF1b	(313.6666666666667, 317)
+14408	17995	11	106	9	14408 - 17995	3587						frameshift-fusion-orf	ORF1b-ORF1b	(313.6666666666667, 317)
