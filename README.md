@@ -70,12 +70,9 @@ All python and bash scripts can be run independently. Execute any python script 
       
 2. Generate "sgRNA_junction_summary.tsv"  
   
-    $ bash {your folder path}/sgRNA_pipeline.sh -d ~/GenomeDir_SARS2 -v {variant_name} -t {threads-numbers}    
+    $ bash {your folder path}/SPAN.sh -d ~/GenomeDir_SARS2 -v {variant_name} -m PE/SE -t {threads-numbers}    
       
-    Note: sgRNA_pipeline.sh should be located at same directory with your fastq files    
+    Note: SPAN.sh should be located at same directory with your fastq files    
 3. Data visualization  
-    **venndiagram.Rmd** to generate venndiagram in the manuscript "Subgenomic RNAs Profile Analysis of SARS-CoV-2 Variants."  
-    Note: R-markdown file is not run automatically.  
-      
-    (automatically R script) Not done yet  
-    $ R CMD BATCH ~/venndiagram.R -i {"variant_name"_sgRNA_junction_summary.tsv} (at least two)
+    **Plot.Rmd** to generate venndiagram in the manuscript "Subgenomic RNAs Profile Analysis of SARS-CoV-2 Variants."  
+    Note: R markdown file is not run automatically.  
