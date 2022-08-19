@@ -5,6 +5,7 @@ date: '2022-06-28'
 output: html_document
 ---
 
+
 ## Part 1 Setup
 ```{r}
 ## Import library
@@ -215,7 +216,7 @@ full=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
   geom_curve(data=summary%>%filter(location=="BA.4")%>%filter(n>5),lineend = "round",curvature=-0.3,color=grey,size=0.1)+
   geom_curve(data=summary%>%filter(location=="BA.5")%>%filter(n>5),lineend = "round",curvature=0.3,color=grey,size=0.1)+
   scale_alpha_continuous("Number of Samples")+
-  ft_theme()+
+  #ft_theme()+
   scale_x_continuous("Position")+
   annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
   annotate(geom="rect",xmin=0,xmax=200,ymin=-0.05,ymax=0.05,color="grey30",fill="grey30")+
@@ -295,7 +296,6 @@ fullA=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
   geom_curve(data=summaryA%>%filter(location=="Alpha")%>%filter(n>20),lineend = "round",curvature=0.3,color=grey,size=0.1)+
   geom_curve(data=summaryA%>%filter(location=="Omicron")%>%filter(n>20),lineend = "round",curvature=-0.3,color=grey,size=0.1)+
   scale_alpha_continuous("Number of Samples")+
-  ft_theme()+
   scale_x_continuous("Position")+
   annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
   annotate(geom="rect",xmin=0,xmax=200,ymin=-0.05,ymax=0.05,color="grey30",fill="grey30")+
@@ -361,7 +361,6 @@ fullB=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
   geom_curve(data=summaryB%>%filter(location=="Beta")%>%filter(n>20),lineend = "round",curvature=0.3,color=grey,size=0.1)+
   geom_curve(data=summaryB%>%filter(location=="Omicron")%>%filter(n>20),lineend = "round",curvature=-0.3,color=grey,size=0.1)+
   scale_alpha_continuous("Number of Samples")+
-  ft_theme()+
   scale_x_continuous("Position")+
   annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
   annotate(geom="rect",xmin=0,xmax=200,ymin=-0.05,ymax=0.05,color="grey30",fill="grey30")+
@@ -429,7 +428,6 @@ fullC=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
   geom_curve(data=summaryC%>%filter(location=="Gamma")%>%filter(n>20),lineend = "round",curvature=0.3,color=grey,size=0.1)+
   geom_curve(data=summaryC%>%filter(location=="Omicron")%>%filter(n>20),lineend = "round",curvature=-0.3,color=grey,size=0.1)+
   scale_alpha_continuous("Number of Samples")+
-  ft_theme()+
   scale_x_continuous("Position")+
   annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
   annotate(geom="rect",xmin=0,xmax=200,ymin=-0.05,ymax=0.05,color="grey30",fill="grey30")+
@@ -495,7 +493,6 @@ fullD=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
   geom_curve(data=summaryD%>%filter(location=="Delta")%>%filter(n>20),lineend = "round",curvature=0.3,color=grey,size=0.1)+
   geom_curve(data=summaryD%>%filter(location=="Omicron")%>%filter(n>20),lineend = "round",curvature=-0.3,color=grey,size=0.1)+
   scale_alpha_continuous("Number of Samples")+
-  ft_theme()+
   scale_x_continuous("Position")+
   annotate(geom="rect",xmin=0,xmax=30000,ymin=-0.05,ymax=0.05,color="grey80",fill="grey80")+
   annotate(geom="rect",xmin=0,xmax=200,ymin=-0.05,ymax=0.05,color="grey30",fill="grey30")+
@@ -540,51 +537,9 @@ fullD=ggplot(mapping=aes(x=j5,y=y,xend=j3,yend=y))+
 ```
   ## Summary Output Plot (Fig 4 & Fig 5)
 ```{r}
-Fig4 <- ggarrange(fullA, fullB, fullC, fullD, common.legend = TRUE, ncol = 2, nrow = 2)
-ggsave(file.path("./Figure 4. The noncanonical subgenomic RNAs distribution plot from four different variants compared to Omicron variant.pdf"), Fig4, width = 21, height = 14.8, units = "cm")
+Fig4 <- ggarrange(fullA, fullB, fullC, fullD, legend="right", common.legend = TRUE, ncol = 1, nrow = 4, labels = c("A","B","C","D"))
+ggsave(file.path("./Figure 4. The noncanonical subgenomic RNAs distribution plot from four different variants compared to Omicron variant.pdf"), Fig4, width = 14.8, height = 21, units = "cm")
 
-Fig5 <- ggarrange(Omicron_plot, full, ncol = 1, nrow = 2)
-ggsave(file.path("./Figure 5_v2. Profiling of noncanonical subgenomic RNAs form different SARS-CoV-2 Omicron lineages.pdf"), Fig5, width = 21, height = 14.8, units = "cm")
-```
-
-
-
-### Other Example Code
-  ## Generate Top 50 sgRNA from raw noncanonical junction
-```{r}
-BA.4 = read.delim("../../tsv/BA.4_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
-
-BA.4 = BA.4%>%mutate(total=(as.numeric(as.character(count))))%>%group_by(JS,j5,j3,deletion.size,evtype,evrelorf)%>%summarise(count=sum(total))%>%arrange(desc(count))%>%head(50)
-
-BA.5 = read.delim("../../tsv/BA.5_sgRNA_nc_junction_summary.tsv", header= TRUE, sep = "\t")
-BA.5 = BA.5%>%mutate(total=(as.numeric(as.character(count))))%>%group_by(JS,j5,j3,deletion.size,evtype,evrelorf)%>%summarise(count=sum(total))%>%arrange(desc(count))%>%head(50)
-```
-  ## Load data (excel)
-```{r}
-library(openxlsx)
-Name <- read.xlsx("$filefullpath/filename.xlsx",sheet = "工作表1")
-```
-  ## Combine all dataframe
-```{r}
-Variant = list(B.1.1.7,B.1.351,B.1.617.2,P.1,B.1.1.529)
-VariantJS <- Variant %>% reduce(full_join)
-##https://www.delftstack.com/zh-tw/howto/r/merge-in-r/
-```
-  ## sum up by JS
-```{r}
-B.1.1.7 <- aggregate(count ~ JS , B.1.1.7, sum) 
-B.1.1.7 <- filter(B.1.1.7, count >= 100) 
-B.1.1.7 <- arrange(B.1.1.7,desc(count))
-B.1.351 <- aggregate(count ~ JS , B.1.351, sum) 
-B.1.351 <- filter(B.1.351, count >= 100) 
-B.1.351 <- arrange(B.1.351,desc(count))
-B.1.617.2 <- aggregate(count ~ JS , B.1.617.2, sum) 
-B.1.617.2 <- filter(B.1.617.2, count >= 100) 
-B.1.617.2 <- arrange(B.1.617.2,desc(count))
-P.1 <- aggregate(count ~ JS , P.1, sum) 
-P.1 <- filter(P.1, count >= 100) 
-P.1 <- arrange(P.1,desc(count))
-B.1.1.529 <- aggregate(count ~ JS , B.1.1.529, sum) 
-B.1.1.529 <- filter(B.1.1.529, count >= 100) 
-B.1.1.529 <- arrange(B.1.1.529,desc(count))
+Fig5 <- ggarrange(Omicron_plot, full, ncol = 1, nrow = 2, labels = c("A","B"))
+ggsave(file.path("./Figure 5_v2. Profiling of noncanonical subgenomic RNAs form different SARS-CoV-2 Omicron lineages.pdf"), Fig5, width = 14.8, height = 14.8, units = "cm")
 ```

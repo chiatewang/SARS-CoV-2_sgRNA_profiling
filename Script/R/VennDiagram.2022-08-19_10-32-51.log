@@ -1,0 +1,16 @@
+INFO [2022-08-19 10:32:51] [[1]]
+INFO [2022-08-19 10:32:51] list(Omicron = Omicron$JS, Beta = Beta$JS, Alpha = Alpha$JS, 
+INFO [2022-08-19 10:32:51]     Gamma = Gamma$JS, Delta = Delta$JS)
+INFO [2022-08-19 10:32:51] 
+INFO [2022-08-19 10:32:51] $filename
+INFO [2022-08-19 10:32:51] NULL
+INFO [2022-08-19 10:32:51] 
+INFO [2022-08-19 10:32:51] $main.cex
+INFO [2022-08-19 10:32:51] [1] 1
+INFO [2022-08-19 10:32:51] 
+INFO [2022-08-19 10:32:51] $main
+INFO [2022-08-19 10:32:51] [1] " "
+INFO [2022-08-19 10:32:51] 
+INFO [2022-08-19 10:32:51] $fill
+INFO [2022-08-19 10:32:51] c("navy", "orange", "yellow", "coral", "grey")
+INFO [2022-08-19 10:32:51] 
