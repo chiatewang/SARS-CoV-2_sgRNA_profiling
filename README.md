@@ -7,24 +7,24 @@
 
 This repository and pipeline is for the work reported in the manuscript "Profiling of Noncanonical Subgenomic RNAs in SARS-CoV-2 Variants."
 
-The purpose of this pipeline is to process Next Generation Sequencing (NGS) data. 
-This script maps the reads against the SARS-CoV-2 genome and generates junction coordinates from splice alignments; junction coordinates next process using python script to identify subgenomic RNAs and finally visualize using R packages.
+The purpose of this pipeline is to process Next Generation Sequencing (NGS) data.  
+This script maps the reads against the SARS-CoV-2 genome and generates junction coordinates from splice alignments; junction coordinates next process using python script to identify subgenomic RNAs and finally visualize using R packages.  
 
-All scripts can be run independently. Execute any script for detailed instructions on how to run them.
+All scripts can be run independently. Execute any script for detailed instructions on how to run them.  
 
 
 ### Hareware/software requirements: 
 
-1. Linux or MacOS
-2. R (version 4.1)
-3. python (version 3.8.10)
+1. Linux or MacOS  
+2. R (version 4.1)  
+3. python (version 3.8.10)  
 
 ### Installation:
 
 1. Environments setup:
 
-    $ cd {path_to_SPAN_folder}/SPAN
-    $ conda env create -f ~/SPAN/SPAN.yml -n SPAN
+    $ cd {path_to_SPAN_folder}/SPAN  
+    $ conda env create -f ~/SPAN/SPAN.yml -n SPAN  
     $ conda activate SPAN
     $ Rscript install.R
          
