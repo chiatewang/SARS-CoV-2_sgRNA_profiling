@@ -15,7 +15,7 @@ All scripts can be run independently. Execute any script for detailed instructio
 
 ### Hareware/software requirements: 
 
-1. Linux and MacOS
+1. Linux or MacOS
 2. R (version 4.1)
 3. python (version 3.8.10)
 
@@ -60,7 +60,9 @@ All scripts can be run independently. Execute any script for detailed instructio
     
     $ python Summarize_intersecting_ncsgRNAs.py -v {Variants_sets}  
      #### Notes: Variants_sets information can be found in "sgRNA_intersection_list.csv" and make sure to
-     #### add " ' " at the begin and the end or you will get "error: unrecognized arguments:"
+     #### add " ' " at the begin and the end or you will get "error: unrecognized arguments:"  
+     #### Example Code:  
+    $ python Summarize_intersecting_ncsgRNAs.py -v 'BA.5, B.1.1.529'
     
 7. Data visualization  
 
