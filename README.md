@@ -30,7 +30,7 @@ All scripts can be run independently. Execute any script for detailed instructio
          
 2. Build genome index:
     
-    $ cd SPAN
+    $ cd SPAN  
     $ STAR --runMode genomeGenerate -genomeDir ./GenomeDir --runThreadN 4 --genomeFastaFiles ./resources/sars_cov2_NC_045512.2_genome.fasta --sjdbGTFfeatureExon ./resources GCF_009858895.2_ASM985889v3_genomic.gff
          
 ### Usage:  
