@@ -1,78 +1,73 @@
 # Subgenomic RNAs Profile ANalysis (SPAN)
 
-## Subgenomic RNAs Profile ANalysis (SPAN): Subgenomic RNAs Profile Analysis of SARS-CoV-2 Variants
+## Subgenomic RNAs Profile ANalysis (SPAN): Profiling of Noncanonical Subgenomic RNAs in SARS-CoV-2 Variants.
 
 
 ### Description:
 
-This repository and pipeline is for the work reported in the manuscript "Subgenomic RNAs Profile Analysis of SARS-CoV-2 Variants."
+This repository and pipeline is for the work reported in the manuscript "Profiling of Noncanonical Subgenomic RNAs in SARS-CoV-2 Variants."
 
-The purpose of this pipeline is to process Next Generataion Sequencing (NGS) data. 
-This script maps the reads against the SARS-CoV-2 genome and generates junction coordinates from splice alignments; junction corrdinates next process using python script to classify sgRNAs and finally visualize using python script and R packages.
+The purpose of this pipeline is to process Next Generation Sequencing (NGS) data. 
+This script maps the reads against the SARS-CoV-2 genome and generates junction coordinates from splice alignments; junction coordinates next process using python script to identify subgenomic RNAs and finally visualize using R packages.
 
-All python and bash scripts can be run independently. Execute any python script or bash script (without arguments) for detailed instructions on how to run them.
+All scripts can be run independently. Execute any script for detailed instructions on how to run them.
 
 
-### Environments setup: 
+### Hareware/software requirements: 
 
-1. This pipeline is running on Ubuntu 20.04.4 LTS (GNU/Linux 5.13.0-52-generic x86_64)
+1. Linux and MacOS
 2. R (version 4.1)
-3. python (version 3.6.10)
+3. python (version 3.8.10)
 
+### Installation:
 
-### Install required tools:
+1. Environments setup:
 
-1. Create conda environments and install some tools or packages  
-  
-    $ conda create --name sgRNA python=3.6.10  
-    $ conda install -c bioconda samtools=1.9 
-    $ conda install -c anaconda pandas  
-    $ conda install -c conda-forge biopython  
-    $ conda install -c conda-forge matplotlib  
-  
-2. Install Trimmomatic (version 0.39)   
-    1. Download from http://www.usadellab.org/cms/?page=trimmomatic  
-    2. Add environment variable  
-      
-        $ vi .bashrc  
-        add "export PATH={your install dir}/Trimmomatic-0.39" to .bashrc file  
-          
-3. Install STAR mapping tool (version 2.7.9a)  
-    1. Download Source Code (tar.gz) from https://github.com/alexdobin/STAR/releases/tag/2.7.9a  
-    2. Uncompress  
-      
-       $ tar -xzf 2.7.9a.tar.gz  
-       $ cd STAR-2.7.9a
+    $ cd {path_to_SPAN_folder}/SPAN
+    $ conda env create -f ~/SPAN/SPAN.yml -n SPAN
+    $ conda activate SPAN
+    $ Rscript install.R
          
-    3. Compile  
-  
-       $ cd STAR/source  
-       $ make STAR  
+2. Build genome index:
+    
+    $ cd SPAN
+    $ STAR --runMode genomeGenerate -genomeDir ./GenomeDir --runThreadN 4 --genomeFastaFiles ./resources/sars_cov2_NC_045512.2_genome.fasta --sjdbGTFfeatureExon ./resources GCF_009858895.2_ASM985889v3_genomic.gff
          
-    4. Add environment variable  
-      
-       $ vi .bashrc  
-       add "export PATH={your install path}/STAR-2.7.9a/bin/Linux_x86_64" to .bashrc file  
-         
-    5. Build genome index  
-      
-       $ STAR \  
-       --runMode genomeGenerate -genomeDir ./genomeDir_SARS2 \  
-       --runThreadN 4 \  
-       --genomeFastaFiles ./SPAN/resources/sars_cov2_NC_045512.2_genome.fasta \  
-       --sjdbGTFfeatureExon ./SPAN/resources/GCF_009858895.2_ASM985889v3_genomic.gff  
-         
-
 ### Usage:  
-1. Activate conda environment. 
+1. Activate conda environment.
   
-    $ conda activate sgRNA  
-      
-2. Generate "sgRNA_junction_summary.tsv"  
+    $ conda activate SPAN
+    
+2. Prepare fastq files in ~/SPAN/{variant_name} folder
+    
+3. Generate "ncsgRNA_junction_summary.tsv"
   
-    $ bash {your folder path}/SPAN.sh -d GenomeDir_SARS2 -v {variant_name} -m PE/SE -t {threads-numbers}    
-      
-    Note: SPAN.sh should be located at same directory with your fastq files    
-3. Data visualization  
-    **Plot.Rmd** to generate venndiagram in the manuscript "Subgenomic RNAs Profile Analysis of SARS-CoV-2 Variants."  
-    Note: R markdown file is not run automatically.  
+    $ bash SPAN.sh -d GenomeDir -v {variant_name} -t {threads-numbers}
+    ## Example code:
+    $ bash SPAN.sh -d GenomeDir -v B.1.1.529 -t 4
+    $ bash SPAN.sh -d GenomeDir -v BA.5 -t 4
+
+4. Generate JSON file for Venn Diagram
+
+    $ python output_to_json.py
+    
+5. Generate Venn Diagram and prepare "sgRNA_intersection_list.csv" from shiny app
+
+    $ Rscript VennDiagram.R
+    ## Notes: VennDiagram visualizes using R shiny and users can control output using sidebar
+    
+6. Summarize intersecting ncsgRNAs from "sgRNA_intersection_list.csv" and "ncsgRNA_junction_summary.tsv"
+    
+    $ python Summarize_intersecting_ncsgRNAs.py -v {Variants_sets}
+    ## Notes: Variants_sets information can be found in "sgRNA_intersection_list.csv" and make sure to
+    ## add " ' " at the begin and the end or you will get "error: unrecognized arguments:"
+    
+7. Data visualization  
+    **VennDiagram.R** to generate venndiagram in the manuscript "Profiling of Noncanonical Subgenomic RNAs in SARS-CoV-2 Variants." 
+    **SPAN_plot.R** to generate sashimi plot and ncsgRNAs expression plot in the manuscript "Profiling of Noncanonical Subgenomic RNAs in SARS-CoV-2 Variants."
+    
+    $ Rscript SPAN_plot.R -i sample_list.txt -f {lineage_name} -n {number_of_samples filter} -r {reads_per_million filter}
+    ## Notes: sample_list.txt which contains all lineage names except main lineage should be manually created by users.
+    ## Notes: -f choose the lineage in your comparsion that you want to be the main lineage, -n filter number of samples greater than the number you type (e.g. -n 4 means filter ncsgRNAs identified at least 5 different idependent samples)
+    ## Example Code:
+    $ Rscript SPAN_plot.R -i sample_list.txt -f BA.5 -n 0 -r 10
