@@ -60,6 +60,7 @@ THREADS: $THREADS
 "
 
 echo "Starting script."
+mkdir raw_tsv
 path="$PWD"
 cd $VARIANTS
 date +"%y-%m-%d-%T">> "$VARIANTS"_time.log
