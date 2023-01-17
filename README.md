@@ -44,7 +44,7 @@ All scripts can be run independently. Execute any script for detailed instructio
   
     $ bash SPAN.sh -d GenomeDir -v {variant_name} -t {threads-numbers}
      Example code:
-    $ bash SPAN.sh -d GenomeDir -v B.1.1.529 -t 4
+    $ bash SPAN.sh -d GenomeDir -v B.1.1.529 -t 4  
     $ bash SPAN.sh -d GenomeDir -v BA.5 -t 4
 
 4. Generate JSON file for Venn Diagram
@@ -63,11 +63,13 @@ All scripts can be run independently. Execute any script for detailed instructio
      add " ' " at the begin and the end or you will get "error: unrecognized arguments:"
     
 7. Data visualization  
-    **VennDiagram.R** to generate venndiagram in the manuscript "Profiling of Noncanonical Subgenomic RNAs in SARS-CoV-2 Variants." 
+    **VennDiagram.R** to generate venndiagram in the manuscript "Profiling of Noncanonical Subgenomic RNAs in SARS-CoV-2 Variants."  
     **SPAN_plot.R** to generate sashimi plot and ncsgRNAs expression plot in the manuscript "Profiling of Noncanonical Subgenomic RNAs in SARS-CoV-2 Variants."
     
-    $ Rscript SPAN_plot.R -i sample_list.txt -f {lineage_name} -n {number_of_samples filter} -r {reads_per_million filter}
-    # Notes: sample_list.txt which contains all lineage names except main lineage should be manually created by users.
-    # Notes: -f choose the lineage in your comparsion that you want to be the main lineage, -n filter number of samples greater than the number you type (e.g. -n 4 means filter ncsgRNAs identified at least 5 different idependent samples)
+    $ Rscript SPAN_plot.R -i sample_list.txt -f {lineage_name} -n {number_of_samples filter} -r {reads_per_million filter}  
+    # Notes: sample_list.txt which contains all lineage names except main lineage should be manually created by users.  
+    # Notes: -f choose the lineage in your comparsion that you want to be the main lineage,   
+    -n filter number of samples greater than the number you type  
+    (e.g. -n 4 means filter ncsgRNAs identified at least 5 different idependent samples)
     # Example Code:
     $ Rscript SPAN_plot.R -i sample_list.txt -f BA.5 -n 0 -r 10
