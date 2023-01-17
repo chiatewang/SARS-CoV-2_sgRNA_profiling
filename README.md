@@ -42,8 +42,8 @@ All scripts can be run independently. Execute any script for detailed instructio
     
 3. Generate "ncsgRNA_junction_summary.tsv"
   
-    $ bash SPAN.sh -d GenomeDir -v {variant_name} -t {threads-numbers}
-     Example code:
+    $ bash SPAN.sh -d GenomeDir -v {variant_name} -t {threads-numbers}  
+     #### Example code:
     $ bash SPAN.sh -d GenomeDir -v B.1.1.529 -t 4  
     $ bash SPAN.sh -d GenomeDir -v BA.5 -t 4
 
@@ -53,23 +53,23 @@ All scripts can be run independently. Execute any script for detailed instructio
     
 5. Generate Venn Diagram and prepare "sgRNA_intersection_list.csv" from shiny app
 
-    $ Rscript VennDiagram.R
-    # Notes: VennDiagram visualizes using R shiny and users can control output using sidebar
+    $ Rscript VennDiagram.R  
+     #### Notes: VennDiagram visualizes using R shiny and users can control output using sidebar
     
 6. Summarize intersecting ncsgRNAs from "sgRNA_intersection_list.csv" and "ncsgRNA_junction_summary.tsv"
     
-    $ python Summarize_intersecting_ncsgRNAs.py -v {Variants_sets}
-     Notes: Variants_sets information can be found in "sgRNA_intersection_list.csv" and make sure to
-     add " ' " at the begin and the end or you will get "error: unrecognized arguments:"
+    $ python Summarize_intersecting_ncsgRNAs.py -v {Variants_sets}  
+     #### Notes: Variants_sets information can be found in "sgRNA_intersection_list.csv" and make sure to
+     #### add " ' " at the begin and the end or you will get "error: unrecognized arguments:"
     
 7. Data visualization  
     **VennDiagram.R** to generate venndiagram in the manuscript "Profiling of Noncanonical Subgenomic RNAs in SARS-CoV-2 Variants."  
     **SPAN_plot.R** to generate sashimi plot and ncsgRNAs expression plot in the manuscript "Profiling of Noncanonical Subgenomic RNAs in SARS-CoV-2 Variants."
     
     $ Rscript SPAN_plot.R -i sample_list.txt -f {lineage_name} -n {number_of_samples filter} -r {reads_per_million filter}  
-    # Notes: sample_list.txt which contains all lineage names except main lineage should be manually created by users.  
-    # Notes: -f choose the lineage in your comparsion that you want to be the main lineage,   
+     #### Notes: sample_list.txt which contains all lineage names except main lineage should be manually created by users.  
+     #### Notes: -f choose the lineage in your comparsion that you want to be the main lineage,   
     -n filter number of samples greater than the number you type  
-    (e.g. -n 4 means filter ncsgRNAs identified at least 5 different idependent samples)
-    # Example Code:
+    (e.g. -n 4 means filter ncsgRNAs identified at least 5 different idependent samples)  
+     #### Example Code:
     $ Rscript SPAN_plot.R -i sample_list.txt -f BA.5 -n 0 -r 10
