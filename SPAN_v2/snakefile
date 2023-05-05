@@ -9,9 +9,9 @@
 import pandas as pd
 # ===== read in the sample list csv and convert into a dictionary structure
 '''
-{'Acc_numver': {
-  'fq1': '/Users/justin/Desktop/CGU_progress/Snakemake/fastq/BA.2/ERR9374317_1.fastq',
-  'fq2': '/Users/justin/Desktop/CGU_progress/Snakemake/fastq/BA.2/ERR9374317_2.fastq',
+{'Acc_number': {
+  'fq1': '/Path/to/fastq/variant_name/fastq1',
+  'fq2': '/Path/to/fastq/variant_name/fastq2',
   'variant_name': 'Omicron'}, ...
 }
 '''
