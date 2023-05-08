@@ -1,17 +1,17 @@
-library(shiny)
+# ------ Import required packages ------
+library(tidyverse)
 library(rjson)
+library(shiny)
+library(DT)
 library(ggVennDiagram)
+library(ftplottools)
 library(ggplot2)
 library(plotly)
-library(tidyverse)
-library(ftplottools)
 library(ggpubr)
 library(cowplot)
-library(DT)
 path <- getwd()
 # ------ Read in the JSON file to get Junction Site ------
 variants <- fromJSON(file = file.path(paste(path,"/sgRNA_list.json",sep = "")))
-# Ref. https://zhuanlan.zhihu.com/p/148779322
 # ------ UI ------
 ui <- shinyUI(fluidPage(
   titlePanel("Profiling noncanonical subgenomic RNAs of SARS-CoV-2"),
@@ -34,16 +34,19 @@ ui <- shinyUI(fluidPage(
                                       choice = names(variants)),
                           selectInput("variant2", label = "Variant2:",
                                       choice = names(variants)),
-                          sliderInput(inputId = "RPM",
-                                      label = "RPM >=",
-                                      min = 0,
-                                      max = 50,
-                                      value = 1),
-                          sliderInput(inputId = "ns",
-                                      label = "Number of samples >=",
-                                      min = 0,
-                                      max = 10,
-                                      value = 0),
+                          numericInput(inputId = "RPM",
+                                      label = "RPM >= (please enter a number)",
+                                      value = NA,
+                                      min = NA,
+                                      max = NA,
+                                      step = NA),
+                          numericInput(inputId = "ns",
+                                      label = "Number of samples >= 
+                                      (please enter a number)",
+                                      value = NA,
+                                      min = NA,
+                                      max = NA,
+                                      step = NA),
                           downloadButton("download3", "Download Junction Sashimi Plot")),
              mainPanel(width = 9,
                        plotOutput("junction"),
@@ -282,7 +285,7 @@ server <- shinyServer(function(input, output){
                    filter(number_of_samples>=input$ns,RPM>input$RPM)%>%
                    arrange(number_of_samples),aes(x=j3,y=-0.02,size=RPM,color=number_of_samples))+
       scale_color_gradient("Number of\nSamples",low="#E3D7D5",high="#EA5F51")+
-      scale_size_continuous("RPM",limits= c(0,50))+
+      scale_size_continuous("RPM")+
       annotate("text",label=input$variant1,fontface='bold',x=1000,y=0.04,color="#000000")+
       annotate("text",label=input$variant2,fontface='bold',x=1000,y=-0.04,color="#000000")+
       theme(legend.position = 'none',
@@ -319,7 +322,7 @@ server <- shinyServer(function(input, output){
                    filter(variants==input$variant2)%>%
                    filter(number_of_samples>=input$ns,RPM>input$RPM)%>%
                    arrange(number_of_samples),aes(x=j3,y=-0.02,color=number_of_samples))+
-      scale_color_gradient("Number of\nSamples",low="#E3D7D5",high="#EA5F51",limits= c(0,20))+
+      scale_color_gradient("Number of\nSamples",low="#E3D7D5",high="#EA5F51")+
       theme(legend.position = "right",
             legend.direction = "vertical",
             legend.key.height = unit(0.5, "cm"),
@@ -342,7 +345,7 @@ server <- shinyServer(function(input, output){
                    filter(variants==input$variant2)%>%
                    filter(number_of_samples>=input$ns,RPM>input$RPM)%>%
                    arrange(number_of_samples),aes(x=j3,y=-0.02,size=RPM))+
-      scale_size_continuous("RPM",limits= c(0,50))+
+      scale_size_continuous("RPM")+
       theme(legend.position = "right",
             legend.direction = "vertical",
             legend.key.height = unit(0.5, "cm"),
