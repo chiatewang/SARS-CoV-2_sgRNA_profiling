@@ -14,10 +14,10 @@
 ### Installation:
 Environments setup:
 ```shell
-cd {path_to_SPAN_folder}/SPAN_v2
+cd {path_to_SPAN_folder}/SPAN
 ```
 ```python
-conda env create -f ~/SPAN_v2/SPAN.yml -n SPAN
+conda env create -f ~/SPAN/SPAN.yml -n SPAN
 conda activate SPAN
 ```
 ```r
@@ -28,11 +28,11 @@ Rscript install.R
 ```shell
 conda activate SPAN
 ```
-2. Prepare fastq files in ~/SPAN_v2/{variant_name} folder:  
+2. Prepare fastq files in ~/SPAN/{variant_name} folder:  
 `We provide testing data, please using SRAToolkit fasterq-dump function to get two fastq for each sra run first.`
 3. Prepare sample.txt:
 ```python
-python ~/SPAN_v2/scripts/generate_sample_list.py
+python ~/SPAN/scripts/generate_sample_list.py
 ```    
 4. Executing SPAN pipeline with snakemake:
 ```python
