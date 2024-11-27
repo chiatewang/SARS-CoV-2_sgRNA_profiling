@@ -1,0 +1,3 @@
+id	fq1	fq2	variant_name
+ERR9875004	/Users/yngong/git-my-repo/sharing/SPAN/fastq/BA.2/ERR9875004_1.fastq	/Users/yngong/git-my-repo/sharing/SPAN/fastq/BA.2/ERR9875004_2.fastq	BA.2
+ERR9128175	/Users/yngong/git-my-repo/sharing/SPAN/fastq/BA.1/ERR9128175_1.fastq	/Users/yngong/git-my-repo/sharing/SPAN/fastq/BA.1/ERR9128175_2.fastq	BA.1
